@@ -13,6 +13,7 @@ function callApi() {
         })
         .then(dataJSON => {
             showPers(dataJSON);
+            console.log(dataJSON)
         })
 }
 
@@ -27,10 +28,10 @@ function showPers(data) {
              <img src="${character.image}" class="img-fluid rounded-start" alt="...">
            </div>
            <div class="col-md-8">
-             <div class="card-body">
+             <div class="card-body" id="textCard">
                <h5 class="card-title">${character.name}</h5>
                <p class="card-text">${character.status}</p>
-               <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+               <p class="card-text"><small class="text-muted">Origen: ${character.location.name}</small></p>
              </div>
            </div>
          </div>
@@ -51,7 +52,7 @@ function showPers(data) {
 const limpiarBtn = document.createElement('button');
 
 
-btn.addEventListener("click", function(){
+btn.addEventListener("click" , function(){
     body.append(main)
 
     callApi()
@@ -60,7 +61,7 @@ btn.addEventListener("click", function(){
     limpiarBtn.id = "clear"
     limpiarBtn.textContent = "Limpiar"
     buttons.append(limpiarBtn)
-    
+    btn.disabled = true;
    
 });
 
@@ -68,6 +69,8 @@ limpiarBtn.addEventListener("click", function(){
     main.innerHTML = '';
     buttons.removeChild(limpiarBtn)
     body.removeChild(main);
+    btn.disabled = false;
+
 })
 
 
