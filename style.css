@@ -63,3 +63,13 @@ body {
 #clear{
     margin: 1%;
 }
+.oneImage{
+    width: 320px;
+}
+.oneName{
+    color: white;
+}
+#search{
+    font-size: 30px;
+    margin-left: 1%;
+}

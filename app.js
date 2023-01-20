@@ -2,20 +2,36 @@ const btn = document.querySelector("#call");
 const main = document.createElement("main");
 const divCont = document.createElement('div');
 const body = document.querySelector("body");
-const buttons = document.querySelector(".buttons")
+const buttons = document.querySelector(".buttons");
+const num = document.querySelector("#num");
+const search = document.querySelector('#filter')
+const btnS = document.querySelector('search');
+
+
+
 divCont.className = "image-container";
 body.append(divCont);
 
 function callApi() {
-    fetch("https://rickandmortyapi.com/api/character")
-        .then(data => {
-            return data.json();
-        })
-        .then(dataJSON => {
-            showPers(dataJSON);
-            console.log(dataJSON)
-        })
+    if (num.value === "") {
+        fetch("https://rickandmortyapi.com/api/character")
+            .then(data => {
+                return data.json();
+            })
+            .then(dataJSON => {
+                showPers(dataJSON);
+            })
+    } else {
+        fetch("https://rickandmortyapi.com/api/character/" + num.value)
+            .then(data => {
+                return data.json();
+            })
+            .then(dataJSON => {
+                showOne(dataJSON);
+            })
+    }
 }
+
 
 function showPers(data) {
     data.results.forEach(character => {//Aqui es donde estan todos los personajes (data.results)
@@ -39,20 +55,40 @@ function showPers(data) {
        
 
      </article> `
-     
+
         );
-     
-            
-            main.append(article)
-            
-        })
-        
-       
+
+
+        main.append(article)
+
+    })
+
+
 }
+
+function showOne(data) {
+    const divOne = document.createElement('div');
+    const imgOne = document.createElement('img');
+    const name = document.createElement('p')
+    const url = `${data.image}`;
+    name.textContent = `${data.name}`;
+    name.className = 'oneName';
+    imgOne.src = url;
+    imgOne.className = 'oneImage';
+    divOne.append(name)
+    divOne.append(imgOne);
+    main.append(divOne);
+    limpiarBtn.className = "btn btn-outline-light";
+    limpiarBtn.id = "clear"
+    limpiarBtn.textContent = "Limpiar"
+
+}
+
+
 const limpiarBtn = document.createElement('button');
 
 
-btn.addEventListener("click" , function(){
+btn.addEventListener("click", function () {
     body.append(main)
 
     callApi()
@@ -62,16 +98,35 @@ btn.addEventListener("click" , function(){
     limpiarBtn.textContent = "Limpiar"
     buttons.append(limpiarBtn)
     btn.disabled = true;
-   
+
 });
 
-limpiarBtn.addEventListener("click", function(){
+limpiarBtn.addEventListener("click", function () {
     main.innerHTML = '';
     buttons.removeChild(limpiarBtn)
     body.removeChild(main);
     btn.disabled = false;
 
 })
+search.addEventListener('click', function () {
+    body.append(main)
+    buttons.append(limpiarBtn)
+    callApi()
+    num.value = ""
+})
+
+// btnS.addEventListener('click', function () {
+//     const contButn = document.createRange().createContextualFragment(
+//         `    <div class="form">
+//         <br>    <input type="number" id="num">
+//         <button type="submit" class="btn btn-outline-light" id="filter">Buscar por ID</button>
+    
+//     </div>
+//         `
+//     );
+// body.appendChild(contButn)
+
+// })
 
 
 // function getCharacters(){
