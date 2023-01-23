@@ -3,17 +3,18 @@ const main = document.createElement("main");
 const divCont = document.createElement('div');
 const body = document.querySelector("body");
 const buttons = document.querySelector(".buttons");
-const num = document.querySelector("#num");
-const search = document.querySelector('#filter')
-const btnS = document.querySelector('search');
-
+// const num = document.querySelector("#num");
+// const search = document.querySelector('#filter')
+const btnS = document.querySelector('#search');
+const divById = document.createElement("div");
+const inputById = document.createElement("input");
+const btnById = document.createElement("btn");
 
 
 divCont.className = "image-container";
 body.append(divCont);
 
 function callApi() {
-    if (num.value === "") {
         fetch("https://rickandmortyapi.com/api/character")
             .then(data => {
                 return data.json();
@@ -21,16 +22,26 @@ function callApi() {
             .then(dataJSON => {
                 showPers(dataJSON);
             })
-    } else {
-        fetch("https://rickandmortyapi.com/api/character/" + num.value)
-            .then(data => {
-                return data.json();
-            })
-            .then(dataJSON => {
-                showOne(dataJSON);
-            })
-    }
+    // } else {
+    //     fetch("https://rickandmortyapi.com/api/character/" + inputById.value)
+    //         .then(data => {
+    //             return data.json();
+    //         })
+    //         .then(dataJSON => {
+    //             showOne(dataJSON);
+    //         })
+    // }
 }
+
+function callById(){
+        fetch("https://rickandmortyapi.com/api/character/" + inputById.value)
+        .then(data => {
+            return data.json();
+        })
+        .then(dataJSON => {
+            showOne(dataJSON);
+        })
+    }
 
 
 function showPers(data) {
@@ -98,22 +109,74 @@ btn.addEventListener("click", function () {
     limpiarBtn.textContent = "Limpiar"
     buttons.append(limpiarBtn)
     btn.disabled = true;
+    btnS.disabled = true;
+});
+
+
+
+
+btnS.addEventListener('click', function ()  {
+    cleanById.className = "btn btn-outline-light";
+    cleanById.id = "clear"
+    cleanById.textContent = "Limpiar"
+    btn.disabled = true;
+    divById.className = "form";
+    inputById.type = "number";
+    inputById.id = "num";
+    inputById.required = "required";
+    btnById.className = "btn btn-outline-light";
+    btnById.id = "filter";
+    btnById.textContent = "prueba ";
+    divById.append(inputById, btnById);
+    body.append(divById);
+    buttons.append(cleanById);
+    btnS.disabled = true;
+});
+
+btnById.addEventListener('click', () => {
+        body.append(main);
+        callById()
+    
+    inputById.value = "";
+
+});
+limpiarBtn.addEventListener("click", function () {
+    main.innerHTML = '';
+    btn.disabled = false;
+    btnS.disabled = false;
+    buttons.removeChild(limpiarBtn)
+    body.removeChild(main);
+})
+const cleanById = document.createElement('button');
+cleanById.addEventListener('click', () => {
+    btnS.disabled = false;  
+    btn.disabled = false;
+    body.removeChild(divById);
+    buttons.removeChild(cleanById)
+    body.removeChild(main);
 
 });
 
-limpiarBtn.addEventListener("click", function () {
-    main.innerHTML = '';
-    buttons.removeChild(limpiarBtn)
-    body.removeChild(main);
-    btn.disabled = false;
 
-})
-search.addEventListener('click', function () {
-    body.append(main)
-    buttons.append(limpiarBtn)
-    callApi()
-    num.value = ""
-})
+// search.addEventListener('click', function () {
+//     body.append(main);
+//     buttons.append(limpiarBtn);
+//     callApi()
+//     num.value = "";
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // btnS.addEventListener('click', function () {
 //     const contButn = document.createRange().createContextualFragment(
