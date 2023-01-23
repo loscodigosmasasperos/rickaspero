@@ -9,12 +9,18 @@ const btnS = document.querySelector("#search");
 const divById = document.createElement("div");
 const inputById = document.createElement("input");
 const btnById = document.createElement("btn");
+const btnCleanOne = document.createElement('btn');
+const btnNext = document.createElement('btn');
+
+let counter = 1;
+
+
 
 divCont.className = "image-container";
 body.append(divCont);
 
 function callApi() {
-  fetch("https://rickandmortyapi.com/api/character")
+  fetch(`https://rickandmortyapi.com/api/character/?page=${counter}`)
     .then((data) => {
       return data.json();
     })
@@ -69,6 +75,10 @@ function showPers(data) {
 
     main.append(article);
   });
+  btnNext.className = "btn btn-outline-light";
+  btnNext.id = "btnNext";
+  btnNext.textContent = "Siguiente";
+  body.appendChild(btnNext);
 }
 
 function showOne(data) {
@@ -114,16 +124,25 @@ btnS.addEventListener("click", function () {
   inputById.required = "required";
   btnById.className = "btn btn-outline-light";
   btnById.id = "filter";
-  btnById.textContent = "prueba ";
-  divById.append(inputById, btnById);
+  btnById.textContent = "Buscar ";
+  btnCleanOne.className = "btn btn-outline-light";
+  btnCleanOne.id = "cleanOne";
+  btnCleanOne.textContent = "Eliminar ultimo";
+  divById.append(inputById, btnById, btnCleanOne);
   body.append(divById);
   buttons.append(cleanById);
   btnS.disabled = true;
+
 });
 
 btnById.addEventListener("click", () => {
-  body.append(main);
-  callById();
+  if (inputById.value != "" && inputById.value <= 826){
+    body.append(main);
+    callById();
+  }else if (inputById.value >= 827){
+    alert('No existe ese personaje');
+  }
+ 
 
   inputById.value = "";
 });
@@ -133,14 +152,25 @@ limpiarBtn.addEventListener("click", function () {
   btnS.disabled = false;
   buttons.removeChild(limpiarBtn);
   body.removeChild(main);
+  body.removeChild(btnNext);
 });
 const cleanById = document.createElement("button");
 cleanById.addEventListener("click", () => {
   btnS.disabled = false;
   btn.disabled = false;
+  main.innerHTML = "";
   body.removeChild(divById);
   buttons.removeChild(cleanById);
   body.removeChild(main);
+});
+
+btnCleanOne.addEventListener('click', ()=> {
+  main.removeChild(main.lastChild); //Para eliminar el ultimo 
+});
+btnNext.addEventListener('click', () => {
+  counter++
+  main.innerHTML = "";
+  callApi()
 });
 
 // search.addEventListener('click', function () {
